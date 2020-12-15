@@ -1,6 +1,6 @@
 var express = require('express');
 var graphqlHTTP = require('express-graphql');
-const { makeExecutableSchema } = require("graphql-tools");
+const { makeExecutableSchema } = require("@graphql-tools/schema");
 const _ = require("lodash")
 const cors = require("cors")
 const fetch = require("node-fetch");
@@ -105,7 +105,7 @@ const resolvers = {
       cache.forEach((type, id) => todos.push({ type, id }));
       return todos;
     },
-    
+
     todo: (_, { id }) => {
       return { id, type: cache.get(id) };
     }
