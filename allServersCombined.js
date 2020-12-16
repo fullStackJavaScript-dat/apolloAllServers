@@ -9,6 +9,7 @@ const { unique } = require("shorthash");
 const { generate } = require("shortid");
 
 const DOG_API = "https://dog.ceo/api";
+const EXCHANGE_RATES_API = "https://api.coinbase.com/v2";
 
 const app = express();
 app.use(cors())
@@ -75,7 +76,7 @@ const resolvers = {
       try {
         console.log("FETCHING")
         const results = await fetch(
-          `https://api.coinbase.com/v2/exchange-rates?currency=${currency}`
+          `${EXCHANGE_RATES_API}/exchange-rates?currency=${currency}`
         );
         const exchangeRates = await results.json();
 
@@ -91,7 +92,6 @@ const resolvers = {
     dogs: async () => {
       const results = await fetch(`${DOG_API}/breeds/list/all`);
       const { message: dogs } = await results.json();
-
       return _.map(dogs, createDog);
     },
     dog: async (root, { breed }) => {
@@ -125,9 +125,8 @@ const resolvers = {
   ExchangeRate: {
     name: async ({ currency }) => {
       try {
-        const results = await fetch("https://api.coinbase.com/v2/currencies");
-        const currencyData = await results.json();
-
+        const currencyData = await fetch("https://api.coinbase.com/v2/currencies").then(r => r.json());
+       
         const currencyInfo = currencyData.data.find(
           c => c.id.toUpperCase() === currency
         );
