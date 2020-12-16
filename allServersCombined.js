@@ -1,5 +1,5 @@
 var express = require('express');
-var graphqlHTTP = require('express-graphql');
+var { graphqlHTTP } = require('express-graphql');
 const { makeExecutableSchema } = require("@graphql-tools/schema");
 const _ = require("lodash")
 const cors = require("cors")
@@ -126,7 +126,7 @@ const resolvers = {
     name: async ({ currency }) => {
       try {
         const currencyData = await fetch("https://api.coinbase.com/v2/currencies").then(r => r.json());
-       
+
         const currencyInfo = currencyData.data.find(
           c => c.id.toUpperCase() === currency
         );
